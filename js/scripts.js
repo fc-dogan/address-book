@@ -38,14 +38,30 @@ AddressBook.prototype.deleteContact = function(id) {
 }
 
 //Business logic for Contacts
-function Contact(firstName, lastName, phoneNumber){
+function Contact(firstName, lastName, phoneNumber, email, addresses){
   this.firstName = firstName;
   this.lastName = lastName;
   this.phoneNumber = phoneNumber;
+  this.email = email;
+  this.addresses = [];
+  // this.workAddress = workAddress;
+  // this.homeAddress = homeAddress;
 }
 
 Contact.prototype.fullName = function(){
   return this.firstName + " " + this.lastName;
+}
+
+//Business logic for addresses
+
+function Address(address, type) {
+this.address = address;
+this.type = type;
+}
+
+
+Contact.prototype.addAddress = function(address) {
+  this.addresses.push(address);
 }
 
 //User Interface Logic
@@ -63,10 +79,19 @@ function displayContactDetails(addressBookToDisplay) {
 
 function showContact(contactId) {
   var contact = addressBook.findContact(contactId);
+  
   $("#show-contact").show();
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
+  $(".email").html(contact.email);
+  
+for(var i=0; i<contact.addresses.length; i++){
+  if(contact.addresses[i]){
+    $(".address").append(contact.addresses[i].type + " " + contact.addresses[i].address);
+  }
+}
+
   var buttons = $("#buttons");
   buttons.empty();
   buttons.append("<button class='deleteButton' id=" + contact.id + ">Delete</button>");
@@ -79,7 +104,7 @@ function attachContactListeners() {
       addressBook.deleteContact(this.id);
       $("#show-contact").hide();
       displayContactDetails(addressBook);
-    })
+    });
   });
 };
 
@@ -90,12 +115,22 @@ $(document).ready(function(){
     var inputtedFirstName = $("input#new-first-name").val();
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
+    var inputtedEmail = $("input#new-email").val();
+    var inputtedAddress = $("input#new-address").val();
+    var inputtedType = $("select#new-type").val();
+
 
     $("input#new-first-name").val("");
     $("input#new-last-name").val("");
-    $("input#new-phone-nimber").val("");
+    $("input#new-phone-number").val("");
+    $("input#new-email").val("");
+    $("input#new-address").val("");
+    $("select#new-type").val("");
 
-    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
+
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmail);  
+    var newAddress = new Address(inputtedAddress, inputtedType);
+    newContact.addAddress(newAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
   });
