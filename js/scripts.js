@@ -8,12 +8,10 @@ AddressBook.prototype.addContact = function (contact) {
   contact.id=this.assignId();
   this.contacts.push(contact);
 }
-
 AddressBook.prototype.assignId = function(){
   this.currentId +=1;
   return this.currentId;
 }
-
 AddressBook.prototype.findContact=function(id){
   for(var i=0; i<this.contacts.length; i++){
     if(this.contacts[i]){
@@ -47,18 +45,15 @@ function Contact(firstName, lastName, phoneNumber, email, addresses){
   // this.workAddress = workAddress;
   // this.homeAddress = homeAddress;
 }
-
 Contact.prototype.fullName = function(){
   return this.firstName + " " + this.lastName;
 }
 
 //Business logic for addresses
-
 function Address(address, type) {
 this.address = address;
 this.type = type;
 }
-
 
 Contact.prototype.addAddress = function(address) {
   this.addresses.push(address);
